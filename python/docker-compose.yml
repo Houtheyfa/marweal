@@ -1,0 +1,31 @@
+version: '2'
+services:
+  ng:
+    image: marweal/nginx:1.0
+    ports:
+      - 81:80
+    restart: always
+    volumes: 
+      - ./nginx:/etc/nginx/conf.d
+      - ./logs/nginx:/var/log/nginx
+    links:
+      - py
+      
+  py: 
+    image: marweal/python:1.2
+    restart: always
+    ports:
+      - "5000"
+    links: 
+      - pg
+    volumes: 
+      - ./app:/pyapp
+      - ./logs/py:/var/log/python
+
+  pg:
+    image: postgres:latest 
+    volumes: 
+      - ./logs/pgsql:/var/log/postgres
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=marweal
